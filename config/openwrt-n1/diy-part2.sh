@@ -55,6 +55,10 @@ sed -i 's/root::0:0:99999:7:::/root:$1$V4UetPzk$CYXluq4wUazHjmCDBCqXF.:0:0:99999
 # 自定义miniupnpd miniupnpd-2.2.2-2, 包中已包含
 # rm -rf feeds/packages/net/miniupnpd
 
+rm -rf ./files/kuaicdn/res && mkdir ./files/kuaicdn/res
+wget --no-check-certificate -qO ./files/kuaicdn/res/ipes-linux-arm64-llc-latest.tar.gz 'https://ipes-tus.iqiyi.com/update/ipes-linux-arm64-llc-latest.tar.gz'
+mkdir ./files/kuaicdn/app && tar -zxvf ./files/kuaicdn/res/ipes-linux-arm64-llc-latest.tar.gz -C ./files/kuaicdn/app && chmod a+x ./files/kuaicdn
+
 # Add third-party software packages (The entire repository)
 git clone https://github.com/vpei/vpe01.git package/vpei
 
