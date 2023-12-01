@@ -1,0 +1,15 @@
+
+config base 'base'
+	option enable '1'
+	option time '10'
+	option clean '1'
+	option ipv6 '1'
+	option app_key ''
+	option app_secret ''
+	option interface 'internet'
+	option interface6 'wan_6'
+	option main_domain 'vmess.com'
+	option sub_domain 'cc'
+	option record_id6 '865274906692700160'
+	option record_id '865269950227026944'
+

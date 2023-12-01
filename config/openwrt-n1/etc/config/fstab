@@ -1,0 +1,34 @@
+
+config global
+	option anon_swap '0'
+	option anon_mount '0'
+	option auto_swap '1'
+	option auto_mount '1'
+	option delay_root '5'
+	option check_fs '0'
+
+config mount
+	option target '/boot'
+	option uuid '6EB9-0A66'
+	option enabled '0'
+
+config mount
+	option target '/rom'
+	option uuid 'fa8791ba-23f4-4570-b7ed-facc03f0b88c'
+	option enabled '0'
+
+config mount
+	option target '/mnt/mmcblk2p3'
+	option uuid 'f7099321-0ca4-4191-9bc6-d81015e4dc08'
+	option enabled '1'
+
+config mount
+	option target '/mnt/mmcblk2p4'
+	option uuid '2c6170a1-03f7-4b75-aee7-fa0de20ffb99'
+	option enabled '1'
+
+config mount
+	option target '/mnt/sda1'
+	option uuid '9b1c9a5f-0829-4300-8cb7-0d1d8db4d756'
+	option enabled '1'
+
