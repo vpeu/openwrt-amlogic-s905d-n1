@@ -18,13 +18,8 @@ SHOW_IP_PATTERN="^[ewr].*|^br.*|^lt.*|^umts.*"
 # find the partition where root is located
 ROOT_PTNAME="$(df / | tail -n1 | awk '{print $1}' | awk -F '/' '{print $3}')"
 if [[ -z "${ROOT_PTNAME}" ]]; then
-	# echo "Cannot find the partition corresponding to the root file system!"
-	# exit 1
-	ROOT_PTNAME="$(df /overlay | tail -n1 | awk '{print $1}' | awk -F '/' '{print $3}')"
-	if [[ -z "${ROOT_PTNAME}" ]]; then
-		echo "Cannot find the partition corresponding to the root file system!"
-		exit 1
-	fi
+	echo "Cannot find the partition corresponding to the root file system!"
+	exit 1
 fi
 
 # find the disk where the partition is located, only supports mmcblk?p? sd?? hd?? vd?? and other formats
