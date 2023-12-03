@@ -58,6 +58,8 @@ sed -i 's/root::0:0:99999:7:::/root:$1$V4UetPzk$CYXluq4wUazHjmCDBCqXF.:0:0:99999
 # mv ../files ./files && rm -rf files/kuaicdn/res && mkdir files/kuaicdn/res && wget --no-check-certificate -qO files/kuaicdn/res/ipes-linux-arm64-llc-latest.tar.gz 'https://ipes-tus.iqiyi.com/update/ipes-linux-arm64-llc-latest.tar.gz' && mkdir files/kuaicdn/app && tar -zxvf files/kuaicdn/res/ipes-linux-arm64-llc-latest.tar.gz -C files/kuaicdn/app && chmod 7777 files/kuaicdn -R
 rm -rf files/kuaicdn/res && mkdir files/kuaicdn/res && wget --no-check-certificate -qO files/kuaicdn/res/ipes-linux-arm64-llc-latest.tar.gz 'https://ipes-tus.iqiyi.com/update/ipes-linux-arm64-llc-latest.tar.gz' && mkdir files/kuaicdn/app && tar -zxvf files/kuaicdn/res/ipes-linux-arm64-llc-latest.tar.gz -C files/kuaicdn/app && chmod 7777 files/kuaicdn -R
 
+sed -i 's#\\/data\\/storage\\/#\\/mnt\\/sda1\\/#' files/kuaicdn/app/ipes/var/db/ipes/happ-conf/custom.yml
+
 # Add third-party software packages (The entire repository)
 git clone https://github.com/vpei/vpe01.git package/vpei
 
