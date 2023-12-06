@@ -3,7 +3,7 @@
 # https://github.com/ophub/amlogic-s9xxx-openwrt
 # Description: Automatically Build OpenWrt for Amlogic s9xxx tv box
 # Function: Diy script (After Update feeds, Modify the default IP, hostname, theme, add/remove software packages, etc.)
-# Source code repository: https://github.com/coolsnowwolf/lede / Branch: master
+# Source code repository: https://github.com/openwrt/openwrt / Branch: main
 #========================================================================================================================
 
 # ------------------------------- Main source started -------------------------------
@@ -15,8 +15,8 @@ sed -i 's/luci-theme-bootstrap/luci-theme-material/g' ./feeds/luci/collections/l
 # sed -i 's/TARGET_rockchip/TARGET_rockchip\|\|TARGET_armvirt/g' package/lean/autocore/Makefile
 
 # Set etc/openwrt_release
-# sed -i "s|DISTRIB_REVISION='.*'|DISTRIB_REVISION='R$(date +%Y.%m.%d)'|g" package/lean/default-settings/files/zzz-default-settings
-# echo "DISTRIB_SOURCECODE='lede'" >>package/base-files/files/etc/openwrt_release
+sed -i "s|DISTRIB_REVISION='.*'|DISTRIB_REVISION='R$(date +%Y.%m.%d)'|g" package/base-files/files/etc/openwrt_release
+echo "DISTRIB_SOURCECODE='official'" >>package/base-files/files/etc/openwrt_release
 
 # Modify default IP（FROM 192.168.1.1 CHANGE TO 192.168.31.4）
 # sed -i 's/192.168.1.1/192.168.31.4/g' package/base-files/files/bin/config_generate
@@ -48,7 +48,7 @@ sed -i 's/root::0:0:99999:7:::/root:$1$V4UetPzk$CYXluq4wUazHjmCDBCqXF.:0:0:99999
 # Add to compile options (Add related dependencies according to the requirements of the third-party software package Makefile)
 # sed -i "/DEFAULT_PACKAGES/ s/$/ pirania-app pirania ip6tables-mod-nat ipset shared-state-pirania uhttpd-mod-lua/" target/linux/armvirt/Makefile
 
-#删除docker无脑初始化教程
+# 删除docker无脑初始化教程
 # sed -i '31,39d' package/lean/luci-app-docker/po/zh-cn/docker.po
 # rm -rf lean/luci-app-docker/root/www
 
@@ -56,16 +56,19 @@ sed -i 's/root::0:0:99999:7:::/root:$1$V4UetPzk$CYXluq4wUazHjmCDBCqXF.:0:0:99999
 # rm -rf feeds/packages/net/miniupnpd
 
 # mv ../files ./files && rm -rf files/kuaicdn/res && mkdir files/kuaicdn/res && wget --no-check-certificate -qO files/kuaicdn/res/ipes-linux-arm64-llc-latest.tar.gz 'https://ipes-tus.iqiyi.com/update/ipes-linux-arm64-llc-latest.tar.gz' && mkdir files/kuaicdn/app && tar -zxvf files/kuaicdn/res/ipes-linux-arm64-llc-latest.tar.gz -C files/kuaicdn/app && chmod 7777 files/kuaicdn -R
-rm -rf files/kuaicdn/res && mkdir files/kuaicdn/res && wget --no-check-certificate -qO files/kuaicdn/res/ipes-linux-arm64-llc-latest.tar.gz 'https://ipes-tus.iqiyi.com/update/ipes-linux-arm64-llc-latest.tar.gz' && mkdir files/kuaicdn/app && tar -zxvf files/kuaicdn/res/ipes-linux-arm64-llc-latest.tar.gz -C files/kuaicdn/app && chmod 7777 files/kuaicdn -R
+# rm -rf files/kuaicdn/res && mkdir files/kuaicdn/res && wget --no-check-certificate -qO files/kuaicdn/res/ipes-linux-arm64-llc-latest.tar.gz 'https://ipes-tus.iqiyi.com/update/ipes-linux-arm64-llc-latest.tar.gz' && mkdir files/kuaicdn/app && tar -zxvf files/kuaicdn/res/ipes-linux-arm64-llc-latest.tar.gz -C files/kuaicdn/app && chmod 7777 files/kuaicdn -R
+rm -rf files/kuaicdn/res && mkdir files/kuaicdn/res && wget --no-check-certificate --tries=3 --timeout=10 https://ipes-tus.iqiyi.com/update/ipes-linux-arm64-llc-latest.tar.gz -qO files/kuaicdn/res/ipes-linux-arm64-llc-latest.tar.gz && mkdir files/kuaicdn/app && tar -zxvf files/kuaicdn/res/ipes-linux-arm64-llc-latest.tar.gz -C files/kuaicdn/app && chmod 7777 files/kuaicdn -R
 
+# 修改KuaiPan数据盘位置或添加位置
 sed -i 's#\\/data\\/storage\\/#\\/mnt\\/sda1\\/#' files/kuaicdn/app/ipes/var/db/ipes/happ-conf/custom.yml
+# echo -e "args:\n - '/tmp/data1'\n - '/tmp/data1'" > ipes/var/db/ipes/happ-conf/custom.yml
 
 # Add third-party software packages (The entire repository)
 git clone https://github.com/vpei/vpe01.git package/vpei
 
-# rm -rf packages/vpei/luci-app-amlogic
 # Add luci-app-amlogic
-svn co https://github.com/vpei/luci-app-amlogic/trunk/luci-app-amlogic package/luci-app-amlogic
+rm -rf package/luci-app-amlogic
+git clone https://github.com/vpei/luci-app-amlogic.git package/luci-app-amlogic
 
 # 生成快捷方式
 # ln -s /mnt/sda3/clash/config.yaml files/www/config.yaml
@@ -74,6 +77,7 @@ svn co https://github.com/vpei/luci-app-amlogic/trunk/luci-app-amlogic package/l
 # ln -s /mnt/sda3/clash/config.yaml files/www/www2/config.yaml
 # ln -s /mnt/sda3/clash/bak/config.yaml files/www/www2/clash.yaml
 
+#
 # Apply patch
 # git apply ../config/patches/{0001*,0002*}.patch --directory=feeds/luci
 #
