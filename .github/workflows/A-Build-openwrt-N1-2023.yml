@@ -22,7 +22,7 @@ on:
       openwrt_board:
         description: "Select device board"
         required: false
-        default: "s905d_jp-tvbox"
+        default: "s905d"
         type: choice
         options:
           - all
