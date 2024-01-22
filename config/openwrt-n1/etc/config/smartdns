@@ -244,6 +244,8 @@ config server
 	option port '53'
 
 config domain-rule
+	option no_speed_check '1'
+	option forwarding_domain_set_file '/etc/smartdns/domain-set/chinalist.txt'
 
 config download-file
 	option name 'overseas.txt'
