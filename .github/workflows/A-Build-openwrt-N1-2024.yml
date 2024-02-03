@@ -3,7 +3,7 @@
 # Description: Build OpenWrt
 #============================================================================================
 
-name: A-Build-OpenWrt-N1-2023
+name: A-Build-OpenWrt-N1-2024
 
 on:
   repository_dispatch:
@@ -22,7 +22,7 @@ on:
       openwrt_board:
         description: "Select device board"
         required: false
-        default: "s905d"
+        default: "all"
         type: choice
         options:
           - all
@@ -153,7 +153,7 @@ on:
       openwrt_kernel:
         description: "Select kernel version"
         required: false
-        default: "6.1.1"
+        default: "5.15.1_6.1.1"
         type: choice
         options:
           - 5.4.1_5.10.1
@@ -217,7 +217,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Initialization environment
         id: init
