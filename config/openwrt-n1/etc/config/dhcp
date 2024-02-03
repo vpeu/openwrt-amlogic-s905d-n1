@@ -9,17 +9,16 @@ config dnsmasq
 	option leasefile '/tmp/dhcp.leases'
 	option quietdhcp '1'
 	option localservice '1'
-	option filterwin2k '1'
 	option nonegcache '1'
 	option mini_ttl '0'
 	option nohosts '1'
 	option cachesize '0'
 	option dnsseccheckunsigned '0'
 	option rebind_protection '0'
+	list notinterface 'zerotier'
+	option domainneeded '0'
 	list server '127.0.0.1#6053'
 	option noresolv '1'
-	list notinterface 'zerotier'
-	option domainneeded '1'
 
 config dhcp 'lan'
 	option interface 'lan'
@@ -29,10 +28,12 @@ config dhcp 'lan'
 	option start '1'
 	option force '1'
 	option limit '250'
-	option leasetime '8h'
+	option leasetime '12h'
 	option ra 'server'
 	option dhcpv6 'server'
 	option ra_management '1'
+	option dns_service '0'
+	option ra_useleasetime '1'
 
 config dhcp 'wan'
 	option interface 'wan'
@@ -43,29 +44,4 @@ config odhcpd 'odhcpd'
 	option leasefile '/tmp/hosts/odhcpd'
 	option leasetrigger '/usr/sbin/odhcpd-update'
 	option loglevel '4'
-
-config host
-	option name 'BK-00'
-	option dns '1'
-	option ip '192.168.3.2'
-
-config host
-	option name 'BK-01'
-	option dns '1'
-	option ip '192.168.3.3'
-
-config host
-	option name 'BB-00'
-	option dns '1'
-	option ip '192.168.3.4'
-
-config host
-	option name 'CN'
-	option dns '1'
-	option ip '192.168.3.5'
-
-config host
-	option name 'BB-01'
-	option dns '1'
-	option ip '192.168.3.6'
 

@@ -6,26 +6,27 @@ config interface 'loopback'
 	option netmask '255.0.0.0'
 
 config globals 'globals'
-	option ula_prefix '10:0:11::/48'
 	option packet_steering '1'
 
 config device
 	option name 'br-lan'
 	option type 'bridge'
 	option bridge_empty '1'
-	list ports 'phy0-ap0'
+
+config device
+	option name 'eth0'
 
 config interface 'lan'
 	option device 'br-lan'
 	option proto 'static'
-	option ipaddr '192.168.11.254'
+	option ipaddr '192.168.10.254'
 	option netmask '255.255.255.0'
-	option ip6assign '60'
+	list ip6class 'local'
+	option ip6ifaceid '::254'
 
 config interface 'docker'
 	option device 'docker0'
 	option proto 'none'
-	option auto '0'
 
 config device
 	option type 'bridge'
@@ -36,8 +37,11 @@ config interface 'zerotier'
 	option device 'ztks5zxcy4'
 
 config interface 'wan'
-	option proto 'dhcp'
+	option proto 'pppoe'
 	option device 'eth0'
+	option username 'hfi45593'
+	option password '958199'
+	option ipv6 'auto'
 
 config interface 'wan6'
 	option proto 'dhcpv6'
@@ -45,4 +49,6 @@ config interface 'wan6'
 	option reqaddress 'try'
 	option reqprefix 'auto'
 	option norelease '1'
+	list ip6class 'local'
+	list ip6class 'wan_6'
 
