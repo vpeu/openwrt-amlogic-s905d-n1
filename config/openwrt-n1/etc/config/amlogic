@@ -1,0 +1,17 @@
+
+config amlogic 'config'
+	option enable '1'
+	option amlogic_firmware_repo 'https://github.com/vpei/amlogic-s9xxx-openwrt'
+	option amlogic_firmware_tag 'openwrt'
+	option amlogic_firmware_suffix '.img.gz'
+	option amlogic_kernel_path 'https://github.com/ophub/kernel'
+	option amlogic_firmware_config '1'
+	option amlogic_write_bootloader '1'
+	option amlogic_shared_fstype 'ext4'
+	option amlogic_kernel_branch '6.1'
+
+config settings 'armcpu'
+	option governor0 'performance'
+	option minfreq0 '100000'
+	option maxfreq0 '1512000'
+

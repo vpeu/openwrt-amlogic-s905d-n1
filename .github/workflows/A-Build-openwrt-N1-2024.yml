@@ -16,6 +16,7 @@ on:
         type: choice
         options:
           - openwrt-n1
+          - openwrt-tvbox
           - openwrt-main
           - lede-master
           - immortalwrt-master
