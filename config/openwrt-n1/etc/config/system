@@ -21,6 +21,9 @@ config timeserver 'ntp'
 config led
 	option sysfs 'n1:white:status'
 	option name 'white'
-	option default '1'
-	option trigger 'default-on'
+	option trigger 'netdev'
+	option dev 'eth0'
+	list mode 'link'
+	list mode 'tx'
+	list mode 'rx'
 

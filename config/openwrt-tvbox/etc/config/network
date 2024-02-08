@@ -12,6 +12,7 @@ config device
 	option name 'br-lan'
 	option type 'bridge'
 	option bridge_empty '1'
+	option macaddr '56:C0:AA:16:D7:62'
 
 config device
 	option name 'eth0'
@@ -19,10 +20,11 @@ config device
 config interface 'lan'
 	option device 'br-lan'
 	option proto 'static'
-	option ipaddr '192.168.10.254'
+	option ipaddr '192.168.7.254'
 	option netmask '255.255.255.0'
-	list ip6class 'local'
 	option ip6ifaceid '::254'
+	list dns '192.168.7.254'
+	option ip6assign '64'
 
 config interface 'docker'
 	option device 'docker0'
