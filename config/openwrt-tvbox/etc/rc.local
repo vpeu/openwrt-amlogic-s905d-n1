@@ -31,4 +31,9 @@ sleep 120
 # /usr/bin/frpc -c /etc/frpc.ini
 /usr/sbin/balethirq.pl
 bash /etc/custom_service/start_service.sh
+
+sleep 15
+
+service nginx restart
+
 exit 0

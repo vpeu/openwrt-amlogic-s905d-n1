@@ -57,7 +57,7 @@ http {
 
     client_body_timeout 1200s;		# 读物http body的超时时间
     client_body_buffer_size 64m;	# 缓冲区代理缓冲用户端请求的最大字节数
-    client_max_body_size 1024m;
+    client_max_body_size 10240m;
 
     # 链接超时时间，自动断开
     keepalive_requests 1024;		# 一个keepalive连接上默认最多发送1024个请求
@@ -101,6 +101,7 @@ http {
 
 	# 下面这段就是反代缓存设置了
 	server_tokens off;
+	proxy_ignore_client_abort on;	# on开启，则服务器会忽略客户端中断，一直等着代理服务执行返回。默认是关闭的，即请求过程中如果客户端端主动关闭请求或者客户端网络断掉，那么Nginx会记录499。 499 ：client has closed connection
 	proxy_connect_timeout    5;		# nginx跟后端服务器连接超时时间(代理连接超时)
 	proxy_read_timeout       60;	# 连接成功后，后端服务器响应时间(代理接收超时)
 	proxy_send_timeout       30;	# 请求的超时时间
@@ -118,5 +119,6 @@ http {
     root /www;
 
 	#UCI_HTTP_CONFIG
+
 	include conf.d/*.conf;
 }
