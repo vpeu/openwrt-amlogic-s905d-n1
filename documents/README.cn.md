@@ -12,7 +12,7 @@ Github Actions 是 Microsoft 推出的一项服务，它提供了性能配置非
 - [目录](#目录)
   - [1. 注册自己的 Github 的账户](#1-注册自己的-github-的账户)
   - [2. 设置隐私变量 GITHUB\_TOKEN](#2-设置隐私变量-github_token)
-  - [3. Fork 仓库并设置 GH\_TOKEN](#3-fork-仓库并设置-gh_token)
+  - [3. Fork 仓库并设置工作流权限](#3-fork-仓库并设置工作流权限)
   - [4. 个性化 OpenWrt 固件定制文件说明](#4-个性化-openwrt-固件定制文件说明)
     - [4.1 .config 文件说明](#41-config-文件说明)
       - [4.1.1 首先让固件支持本国语言](#411-首先让固件支持本国语言)
@@ -25,6 +25,7 @@ Github Actions 是 Microsoft 推出的一项服务，它提供了性能配置非
   - [5. 编译固件](#5-编译固件)
     - [5.1 手动编译](#51-手动编译)
     - [5.2 定时编译](#52-定时编译)
+    - [5.3 使用逻辑卷扩大 Github Actions 编译空间](#53-使用逻辑卷扩大-github-actions-编译空间)
   - [6. 保存固件](#6-保存固件)
     - [6.1 保存到 Github Actions](#61-保存到-github-actions)
     - [6.2 保存到 GitHub Releases](#62-保存到-github-releases)
@@ -62,26 +63,15 @@ Github Actions 是 Microsoft 推出的一项服务，它提供了性能配置非
 
 ## 2. 设置隐私变量 GITHUB_TOKEN
 
-设置 Github 隐私变量 `GITHUB_TOKEN` 。在固件编译完成后，我们需要上传固件到 Releases ，我们根据 Github 官方的要求设置这个变量，方法如下：
-Personal center: Settings > Developer settings > Personal access tokens > Generate new token ( Name: GITHUB_TOKEN, Select: public_repo )。其他选项根据自己需要可以多选。提交保存，复制系统生成的加密 KEY 的值，先保存到自己电脑的记事本，下一步会用到这个值。图示如下：
+根据 [GitHub 文档](https://docs.github.com/zh/actions/security-guides/automatic-token-authentication#about-the-github_token-secret)，在每个工作流作业开始时，GitHub 会自动创建唯一的 GITHUB_TOKEN 机密以在工作流中使用。可以使用 `${{ secrets.GITHUB_TOKEN }}` 在工作流作业中进行身份验证。
 
-<div style="width:100%;margin-top:40px;margin:5px;">
-<img src=https://user-images.githubusercontent.com/68696949/109418474-85032b00-7a03-11eb-85a2-759b0320cc2a.jpg width="300" />
-<img src=https://user-images.githubusercontent.com/68696949/109418479-8b91a280-7a03-11eb-8383-9d970f4fffb6.jpg width="300" />
-<img src=https://user-images.githubusercontent.com/68696949/109418483-90565680-7a03-11eb-8320-0df1174b0267.jpg width="300" />
-<img src=https://user-images.githubusercontent.com/68696949/109418493-9815fb00-7a03-11eb-862e-deca4a976374.jpg width="300" />
-<img src=https://user-images.githubusercontent.com/68696949/109418485-93514700-7a03-11eb-848d-36de784a4438.jpg width="300" />
-</div>
+## 3. Fork 仓库并设置工作流权限
 
-## 3. Fork 仓库并设置 GH_TOKEN
-
-现在可以 Fork 仓库了，打开仓库 https://github.com/ophub/amlogic-s9xxx-openwrt ，点击右上的 Fork 按钮，复制一份仓库代码到自己的账户下，稍等几秒钟，提示 Fork 完成后，到自己的账户下访问自己仓库里的 amlogic-s9xxx-openwrt 。在右上角的 `Settings` > `Secrets` > `Actions` > `New repostiory secret` ( Name: `GH_TOKEN`, Value: `填写刚才GITHUB_TOKEN的值` )，保存。并在左侧导航栏的 `Actions` > `General` > `Workflow permissions` 下选择 `Read and write permissions` 并保存。图示如下：
+现在可以 Fork 仓库了，打开仓库 https://github.com/ophub/amlogic-s9xxx-openwrt ，点击右上的 Fork 按钮，复制一份仓库代码到自己的账户下，稍等几秒钟，提示 Fork 完成后，到自己的账户下访问自己仓库里的 amlogic-s9xxx-openwrt 。在右上角的 `Settings` > `Secrets` > `Actions` > `General` > `Workflow permissions` 下选择 `Read and write permissions` 并保存。图示如下：
 
 <div style="width:100%;margin-top:40px;margin:5px;">
 <img src=https://user-images.githubusercontent.com/68696949/109418568-0eb2f880-7a04-11eb-81c9-194e32382998.jpg width="300" />
 <img src=https://user-images.githubusercontent.com/68696949/163203032-f044c63f-d113-4076-bf94-41f86c7dd0ce.png width="300" />
-<img src=https://user-images.githubusercontent.com/68696949/109418573-15417000-7a04-11eb-97a7-93973d7479c2.jpg width="300" />
-<img src=https://user-images.githubusercontent.com/68696949/167579714-fdb331f3-5198-406f-b850-13da0024b245.png width="300" />
 <img src=https://user-images.githubusercontent.com/68696949/167585338-841d3b05-8d98-4d73-ba72-475aad4a95a9.png width="300" />
 </div>
 
@@ -212,6 +202,30 @@ schedule:
   - cron: '0 17 * * *'
 ```
 
+### 5.3 使用逻辑卷扩大 Github Actions 编译空间
+
+Github Actions 编译空间默认是 84G，除去系统和必要软件包外，可用空间在 50G 左右，当编译全部固件时会遇到空间不足的问题，可以使用逻辑卷扩大编译空间至 110G 左右。参考 [.github/workflows/build-openwrt.yml](../.github/workflows/build-openwrt.yml) 文件里的方法，使用下面的命令创建逻辑卷。并在编译时使用逻辑卷的路径。
+
+```yaml
+- name: Create simulated physical disk
+  run: |
+    mnt_size=$(expr $(df -h /mnt | tail -1 | awk '{print $4}' | sed 's/[[:alpha:]]//g' | sed 's/\..*//') - 1)
+    root_size=$(expr $(df -h / | tail -1 | awk '{print $4}' | sed 's/[[:alpha:]]//g' | sed 's/\..*//') - 4)
+    sudo truncate -s "${mnt_size}"G /mnt/mnt.img
+    sudo truncate -s "${root_size}"G /root.img
+    sudo losetup /dev/loop6 /mnt/mnt.img
+    sudo losetup /dev/loop7 /root.img
+    sudo pvcreate /dev/loop6
+    sudo pvcreate /dev/loop7
+    sudo vgcreate github /dev/loop6 /dev/loop7
+    sudo lvcreate -n runner -l 100%FREE github
+    sudo mkfs.xfs /dev/github/runner
+    sudo mkdir -p /builder
+    sudo mount /dev/github/runner /builder
+    sudo chown -R runner.runner /builder
+    df -Th
+```
+
 ## 6. 保存固件
 
 固件保存的设置也在 .github/workflows/build-openwrt.yml 文件里控制。我们将编译好的固件通过脚本自动上传到 github 官方提供的 Actions 和 Releases 里面，或者上传到第三方（ 如 WeTransfer ）。
@@ -238,7 +252,7 @@ schedule:
     tag: openwrt_amlogic_s9xxx_lede_${{ env.PACKAGED_OUTPUTDATE }}
     artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
     allowUpdates: true
-    token: ${{ secrets.GH_TOKEN }}
+    token: ${{ secrets.GITHUB_TOKEN }}
     body: |
       This is OpenWrt firmware for Amlogic s9xxx tv box
       * Firmware information
