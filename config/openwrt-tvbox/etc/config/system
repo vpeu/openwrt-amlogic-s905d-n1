@@ -6,7 +6,7 @@ config system
 	option conloglevel '1'
 	option cronloglevel '9'
 	option log_size '8'
-	option hostname 'C-TVBOX'
+	option hostname 'TVBOX-C'
 	option description 'C-TVBOX-Description'
 	option notes 'C-TVBOX-Notes'
 	option zonename 'Asia/Hong Kong'

@@ -11,28 +11,16 @@ config globals 'globals'
 config device
 	option name 'br-lan'
 	option type 'bridge'
-	option bridge_empty '1'
-	option macaddr '56:C0:AA:16:D7:62'
-
-config device
-	option name 'eth0'
+	list ports 'phy0-ap0'
 
 config interface 'lan'
 	option device 'br-lan'
 	option proto 'static'
-	option ipaddr '192.168.7.254'
+	option ipaddr '192.168.5.254'
 	option netmask '255.255.255.0'
 	option ip6ifaceid '::254'
-	list dns '192.168.7.254'
+	list dns '192.168.5.254'
 	option ip6assign '64'
-
-config interface 'docker'
-	option device 'docker0'
-	option proto 'none'
-
-config device
-	option type 'bridge'
-	option name 'docker0'
 
 config interface 'zerotier'
 	option proto 'dhcp'
@@ -44,6 +32,9 @@ config interface 'wan'
 	option username 'hfi45593'
 	option password '958199'
 	option ipv6 'auto'
+	option peerdns '0'
+	list dns '192.168.5.254'
+	option ip6assign '64'
 
 config interface 'wan6'
 	option proto 'dhcpv6'
@@ -53,4 +44,13 @@ config interface 'wan6'
 	option norelease '1'
 	list ip6class 'local'
 	list ip6class 'wan_6'
+
+config interface 'docker'
+	option device 'docker0'
+	option proto 'none'
+	option auto '0'
+
+config device
+	option type 'bridge'
+	option name 'docker0'
 

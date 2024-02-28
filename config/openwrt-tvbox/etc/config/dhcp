@@ -16,7 +16,7 @@ config dnsmasq
 	option dnsseccheckunsigned '0'
 	option rebind_protection '0'
 	list notinterface 'zerotier'
-	option domainneeded '0'
+	option domainneeded '1'
 	list server '127.0.0.1#6053'
 	option noresolv '1'
 
